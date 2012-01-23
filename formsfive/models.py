@@ -1,6 +1,7 @@
 #!/usr/bin/env python
+from django.core.exceptions import FieldError, NON_FIELD_ERRORS
+from formsfive.widgets import Select, SelectMultiple, Textarea
 from django.forms.forms import Form, get_declared_fields
-from formsfive.widgets import Select, SelectMultiple
 from django.utils.datastructures import SortedDict
 from django.forms.widgets import media_property
 from django.utils.safestring import mark_safe
@@ -46,7 +47,6 @@ HTML5FIELD_FOR_DBFIELD = {
 }
 
 
-
 class _BaseForm(object):
     def clean(self):
         for field in self.cleaned_data:
@@ -60,7 +60,7 @@ class HTML5Form(_BaseForm, Form):
     def print_errors(self):
         errors = []
         for (field, error) in self.errors.items():
-            if field != forms.NON_FIELD_ERRORS and self.fields[field].label:
+            if field != NON_FIELD_ERRORS and self.fields[field].label:
                 errors.append(u'<li><span>%s</span>: ' % self.fields[field].label)
             else:
                 errors.append(u'<li>')
