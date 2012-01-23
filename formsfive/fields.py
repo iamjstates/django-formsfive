@@ -149,6 +149,17 @@ class IntegerField(FloatField, original.IntegerField):
         self.widget.step = step
 
 
+class BigIntegerField(FloatField, original.BigIntegerField):
+    widget = NumberInput
+
+    def __init__(self, max_value=None, min_value=None, step=None, *args, **kwargs):
+        self.max_value, self.min_value = max_value, min_value
+        super(BigIntegerField, self).__init__(*args, **kwargs)
+        self.widget.min = min_value
+        self.widget.max = max_value
+        self.widget.step = step
+
+
 class EmailField(HTML5Field, original.EmailField):
     widget = EmailInput
 
