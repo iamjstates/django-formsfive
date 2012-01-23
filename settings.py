@@ -101,7 +101,7 @@ MIDDLEWARE_CLASSES = (
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
 )
 
-ROOT_URLCONF = 'django-formsfive.urls'
+ROOT_URLCONF = 'django-formsfive-github.urls'
 
 TEMPLATE_DIRS = (
     FORMSFIVE_APP('templates'),

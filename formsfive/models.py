@@ -1,49 +1,51 @@
 #!/usr/bin/env python
-from django.core.exceptions import FieldError, NON_FIELD_ERRORS
 from formsfive.widgets import Select, SelectMultiple, Textarea
-from django.forms.forms import Form, get_declared_fields
+from django.forms.forms import get_declared_fields
 from django.utils.datastructures import SortedDict
 from django.forms.widgets import media_property
-from django.utils.safestring import mark_safe
-from django.db import models as original
+from django.core.exceptions import FieldError
+from django.forms import models as original
 from formsfive import fields as five
-from django.forms import models
-
-__all__ = ('ModelChoiceField', 'ModelMultipleChoiceField')
+from django.db import models
 
 
-class ModelChoiceField(models.ModelChoiceField):
+__all__ = ('ModelChoiceField', 'ModelMultipleChoiceField', 'HTML5ModelForm')
+
+
+class ModelChoiceField(original.ModelChoiceField):
     widget = Select
 
 
-class ModelMultipleChoiceField(models.ModelMultipleChoiceField):
+class ModelMultipleChoiceField(original.ModelMultipleChoiceField):
     widget = SelectMultiple
 
 
 HTML5FIELD_FOR_DBFIELD = {
-    original.BigIntegerField:           {'form_class': five.BigIntegerField},
-    original.BooleanField:              {'form_class': five.BooleanField},
-    original.CharField:                 {'form_class': five.CharField},
-    original.DateField:                 {'form_class': five.DateField},
-    original.DateTimeField:             {'form_class': five.DateTimeField},
-    original.DecimalField:              {'form_class': five.DecimalField},
-    original.EmailField:                {'form_class': five.EmailField},
-    original.FileField:                 {'form_class': five.FileField},
-    original.FilePathField:             {'form_class': five.FilePathField},
-    original.FloatField:                {'form_class': five.FloatField},
-    original.ForeignKey:                {'form_class': ModelChoiceField},
-    original.ImageField:                {'form_class': five.ImageField},
-    original.IntegerField:              {'form_class': five.IntegerField},
-    original.IPAddressField:            {'form_class': five.IPAddressField},
-    original.ManyToManyField:           {'form_class': ModelMultipleChoiceField},
-    original.NullBooleanField:          {'form_class': five.CharField},
-    original.PositiveIntegerField:      {'form_class': five.IntegerField},
-    original.PositiveSmallIntegerField: {'form_class': five.IntegerField},
-    original.SlugField:                 {'form_class': five.SlugField},
-    original.SmallIntegerField:         {'form_class': five.IntegerField},
-    original.TimeField:                 {'form_class': five.TimeField},
-    original.TextField:                 {'form_class': five.SplitDateTimeField, 'widget': Textarea},
-    original.URLField:                  {'form_class': five.URLField},
+    models.BigIntegerField:             {'form_class': five.IntegerField},
+    models.BooleanField:                {'form_class': five.BooleanField},
+    models.CharField:                   {'form_class': five.CharField},
+    models.DateField:                   {'form_class': five.DateField},
+    models.DateTimeField:               {'form_class': five.DateTimeField},
+    models.DecimalField:                {'form_class': five.DecimalField},
+    models.EmailField:                  {'form_class': five.EmailField},
+    models.FileField:                   {'form_class': five.FileField},
+    models.FilePathField:               {'form_class': five.FilePathField},
+    models.FloatField:                  {'form_class': five.FloatField},
+    models.ForeignKey:                  {'form_class': ModelChoiceField},
+    models.ImageField:                  {'form_class': five.ImageField},
+    models.IntegerField:                {'form_class': five.IntegerField},
+    models.IPAddressField:              {'form_class': five.IPAddressField},
+    models.ManyToManyField:             {'form_class': ModelMultipleChoiceField},
+    models.NullBooleanField:            {'form_class': five.CharField},
+    models.PositiveIntegerField:        {'form_class': five.IntegerField},
+    models.PositiveSmallIntegerField:   {'form_class': five.IntegerField},
+    models.SlugField:                   {'form_class': five.SlugField},
+    models.SmallIntegerField:           {'form_class': five.IntegerField},
+    models.PositiveIntegerField:        {'form_class': five.IntegerField},
+    models.PositiveSmallIntegerField:   {'form_class': five.IntegerField},
+    models.TimeField:                   {'form_class': five.TimeField},
+    models.TextField:                   {'form_class': five.SplitDateTimeField, 'widget': Textarea},
+    models.URLField:                    {'form_class': five.URLField},
 }
 
 
@@ -53,29 +55,6 @@ class _BaseForm(object):
             if isinstance(self.cleaned_data[field], basestring):
                 self.cleaned_data[field] = self.cleaned_data[field].strip()
         return self.cleaned_data
-
-
-class HTML5Form(_BaseForm, Form):
-
-    def print_errors(self):
-        errors = []
-        for (field, error) in self.errors.items():
-            if field != NON_FIELD_ERRORS and self.fields[field].label:
-                errors.append(u'<li><span>%s</span>: ' % self.fields[field].label)
-            else:
-                errors.append(u'<li>')
-            errors.append(u'%s</li>' % u"".join([unicode(e) for e in error]))
-
-        if len(errors):
-            return mark_safe('<ul class="errors">%s</ul>' % "\n".join(errors))
-        else:
-            return u""
-
-    def as_p(self):
-        "Returns this form rendered as HTML <p>s."
-        return self._html_output(u'<p>%(label)s %(field)s<br /> %(help_text)s</p>', u'%s', '</p>', u' %s', True)
-
-## END ##
 
 
 def fields_for_model(model, fields=None, exclude=None, widgets=None, formfield_callback=None):

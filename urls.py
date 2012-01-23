@@ -6,5 +6,5 @@ from django.conf.urls import patterns, include, url
 
 urlpatterns = patterns('',
     # Examples:
-    url(r'^$', 'formsfive.views.testing', name='testing'),
+    url(r'^$', 'formsfive.views.example', name='example'),
 )

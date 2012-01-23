@@ -2,6 +2,7 @@
 from formsfive.attributes import *
 from itertools import chain
 
+
 def single_attributes(self):
     '''
     Build a string that contains single
@@ -27,7 +28,7 @@ def create_attributes(self, *args):
         for value in arg:
             listed.append(value)
     check = tuple(listed)
-    return dict([(key,values) for key, values in self.__dict__.items() if key in check and values not in EMPTY_VALUES])
+    return dict([(key, values) for key, values in self.__dict__.items() if key in check and values not in EMPTY_VALUES])
 
 
 def update_widget(self):
@@ -39,7 +40,7 @@ def update_widget(self):
     self.autofocus = self.attrs.get('autofocus', False)
     self.disabled = self.attrs.get('disabled', False)
 
-    defaults = dict([(key,val) for key, val in self.attrs.items() if key in WIDGETS])
+    defaults = dict([(key, val) for key, val in self.attrs.items() if key in WIDGETS])
     self.__dict__.update(defaults)
     self.attrs = dict(item for item in self.attrs.iteritems() if item not in defaults.items())
     return self

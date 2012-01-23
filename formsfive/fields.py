@@ -1,14 +1,13 @@
 #!/usr/bin/env python
-from django.utils.encoding import StrAndUnicode, smart_unicode, force_unicode
+from django.utils.encoding import StrAndUnicode, smart_unicode
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ValidationError
 from django import forms as original
 from django.core import validators
-#from formsfive import extra
 from formsfive.utils import check_default
 import re, inspect
 
-from django.utils.html import escape, conditional_escape
+from django.utils.html import escape
 
 from formsfive.widgets import (
 	HTML5Input, TextInput, HiddenInput, CheckboxInput, Select,
@@ -22,12 +21,12 @@ from formsfive.widgets import (
 EMPTY_VALUES = (None, '', 'NoneType')
 
 __all__ = (
-    'Field', 'HTML5Field', 'CharField', 'IntegerField', 'DateField', 'TimeField',
-    'DateTimeField', 'EmailField', 'FileField', 'ImageField', 'URLField',
-    'BooleanField', 'NullBooleanField', 'ChoiceField', 'MultipleChoiceField',
-    'FloatField', 'DecimalField', 'SlugField', 'RegexField', 'IPAddressField',
-    'TypedChoiceField', 'FilePathField', 'TypedMultipleChoiceField',
-    'ComboField', 'MultiValueField', 'SplitDateTimeField','PasswordField'
+    'Field', 'HTML5Field', 'CharField', 'IntegerField',
+    'DateField', 'TimeField', 'DateTimeField', 'EmailField', 'FileField',
+    'ImageField', 'URLField', 'BooleanField', 'NullBooleanField', 'ChoiceField',
+    'MultipleChoiceField', 'FloatField', 'DecimalField', 'SlugField', 'RegexField',
+    'IPAddressField', 'TypedChoiceField', 'FilePathField', 'TypedMultipleChoiceField',
+    'ComboField', 'MultiValueField', 'SplitDateTimeField', 'PasswordField'
 )
 
 
@@ -55,11 +54,11 @@ class HTML5Field(object):
         check = dict()
         # create a dictionary to check default values
         for item in g.split(", "):
-            key,val = item.split("=")
+            key, val = item.split("=")
             check[key] = val
 
         # compare default values and change if necessary
-        # if you find a better way feel free !! TODO!!
+        # if you find a better way feel free !! TODO !!
         check_default(self, check)
 
 
@@ -105,7 +104,7 @@ class MultipleChoiceField(HTML5Field, original.MultipleChoiceField):
 
 try:
     Parent = original.TypedMultipleChoiceField
-except AttributeError: # Django < 1.3
+except AttributeError:  # Django < 1.3
     class Parent(original.MultipleChoiceField):
         """No-op class for older Django versions"""
         def __init__(self, *args, **kwargs):
@@ -138,26 +137,11 @@ class FloatField(HTML5Field, original.FloatField):
     widget = NumberInput
 
 
-class IntegerField(FloatField, original.IntegerField):
+class IntegerField(HTML5Field, original.IntegerField):
     widget = NumberInput
 
-    def __init__(self, max_value=None, min_value=None, step=None, *args, **kwargs):
-        self.max_value, self.min_value = max_value, min_value
+    def __init__(self, *args, **kwargs):
         super(IntegerField, self).__init__(*args, **kwargs)
-        self.widget.min = min_value
-        self.widget.max = max_value
-        self.widget.step = step
-
-
-class BigIntegerField(FloatField, original.BigIntegerField):
-    widget = NumberInput
-
-    def __init__(self, max_value=None, min_value=None, step=None, *args, **kwargs):
-        self.max_value, self.min_value = max_value, min_value
-        super(BigIntegerField, self).__init__(*args, **kwargs)
-        self.widget.min = min_value
-        self.widget.max = max_value
-        self.widget.step = step
 
 
 class EmailField(HTML5Field, original.EmailField):
@@ -212,4 +196,3 @@ class SplitDateTimeField(original.SplitDateTimeField):
         super(SplitDateTimeField, self).__init__(*args, **kwargs)
         for widget in self.widget.widgets:
             widget.is_required = self.required
-

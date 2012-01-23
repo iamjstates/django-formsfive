@@ -52,7 +52,7 @@ class BaseInput(widgets.Widget):
         if self.is_required:
             return mark_safe(u'<input%s required>' % flatatt(final_attrs))
         else:
-           return mark_safe(u'<input%s>' % flatatt(final_attrs))
+            return mark_safe(u'<input%s>' % flatatt(final_attrs))
 
 
 class HTML5Input(BaseInput):
@@ -82,7 +82,7 @@ class HTML5Input(BaseInput):
         # Use this is order to render HTML single attribute correctly.
         # You will use mostly for multiple widgets
         update_widget(self)
-        self.autocorrect =  self.attrs.get('autocorrect', 'off')
+        self.autocorrect = self.attrs.get('autocorrect', 'off')
         self.autocapitalize = self.attrs.get('autocapitalize', 'off')
         self.results = self.attrs.get('results', None)
         self.readonly = self.attrs.get('readonly', None)
@@ -123,7 +123,7 @@ class TextInput(widgets.TextInput, HTML5Input):
         super(TextInput, self).__init__(default_attrs)
 
     def render(self, name, value, attrs):
-        new_attrs =  create_attributes(self, UNIVERSAL, TEXT_SEARCH)
+        new_attrs = create_attributes(self, UNIVERSAL, TEXT_SEARCH)
         return HTML5Input.render(self, name, value, attrs, new_attrs)
 
 
@@ -131,7 +131,7 @@ class PasswordInput(widgets.PasswordInput, HTML5Input):
     input_type = 'password'
 
     def render(self, name, value, attrs=None):
-        new_attrs =  create_attributes(self, UNIVERSAL, PASSWORD)
+        new_attrs = create_attributes(self, UNIVERSAL, PASSWORD)
         if not self.render_value: value=None
         return HTML5Input.render(self, name, value, attrs, new_attrs)
 
@@ -154,7 +154,7 @@ class HiddenInput(widgets.HiddenInput, HTML5Input):
     is_hidden = True
 
     def render(self, name, value, attrs):
-        new_attrs =  create_attributes(self, UNIVERSAL, TEXT_SEARCH)
+        new_attrs = create_attributes(self, UNIVERSAL, TEXT_SEARCH)
         return HTML5Input.render(self, name, value, attrs, new_attrs)
 
 
@@ -174,9 +174,9 @@ class MultipleHiddenInput(widgets.HiddenInput, HTML5Input):
         if value is None:
             value = []
 
-        new_attrs =  create_attributes(self, UNIVERSAL, TEXT_SEARCH)
+        new_attrs = create_attributes(self, UNIVERSAL, TEXT_SEARCH)
 
-        final_attrs = self.build_attrs(attrs, type=self.input_type, name=name)
+        final_attrs = self.build_attrs(attrs, type=self.input_type, name=name, **new_attrs)
 
         id_ = final_attrs.get('id', None)
         inputs = []
@@ -200,7 +200,7 @@ class SlugInput(HTML5Input):
         super(SlugInput, self).__init__(default_attrs)
 
     def render(self, name, value, attrs):
-        new_attrs =  create_attributes(self, UNIVERSAL, TEXT_SEARCH)
+        new_attrs = create_attributes(self, UNIVERSAL, TEXT_SEARCH)
         return HTML5Input.render(self, name, value, attrs, new_attrs)
 
 
@@ -212,7 +212,7 @@ class IPAddressInput(widgets.TextInput, HTML5Input):
         super(IPAddressInput, self).__init__(default_attrs)
 
     def render(self, name, value, attrs):
-        new_attrs =  create_attributes(self, UNIVERSAL, TEXT_SEARCH)
+        new_attrs = create_attributes(self, UNIVERSAL, TEXT_SEARCH)
         return HTML5Input.render(self, name, value, attrs, new_attrs)
 
 
@@ -220,12 +220,12 @@ class CheckboxInput(widgets.CheckboxInput, HTML5Input):
     input_type = 'checkbox'
 
     def render(self, name, value, attrs=None, elements=None, choices=()):
-        new_attrs =  create_attributes(self, UNIVERSAL, CHOICE)
+        new_attrs = create_attributes(self, UNIVERSAL, CHOICE)
         elements = single_attributes(self)
         final_attrs = self.build_attrs(attrs, name=name, type="checkbox", **new_attrs)
         try:
             result = self.check_test(value)
-        except: # Silently catch exceptions
+        except:  # Silently catch exceptions
             result = False
         if result:
             final_attrs['checked'] = 'checked'
@@ -241,7 +241,7 @@ class Select(widgets.Select, HTML5Input):
         self.choices = list(choices)
 
     def render(self, name, value, attrs=None, choices=()):
-        new_attrs =  create_attributes(self, UNIVERSAL, SELECT)
+        new_attrs = create_attributes(self, UNIVERSAL, SELECT)
         # build a list of possible elements
         elements = single_attributes(self)
         if value is None: value = ''
@@ -292,7 +292,7 @@ class NullBooleanSelect(widgets.NullBooleanSelect, Select):
 class Textarea(HTML5Input, widgets.Textarea):
 
     def render(self, name, value, attrs=None):
-        new_attrs =  create_attributes(self, UNIVERSAL, TEXT_SEARCH)
+        new_attrs = create_attributes(self, UNIVERSAL, TEXT_SEARCH)
         attrs.update(**new_attrs)
         elements = single_attributes(self)
         if value is None: value = ''
@@ -309,7 +309,7 @@ class FileInput(HTML5Input, widgets.FileInput):
 class SelectMultiple(Select):
 
     def render(self, name, value, attrs=None, choices=()):
-        new_attrs =  create_attributes(self, UNIVERSAL, SELECT)
+        new_attrs = create_attributes(self, UNIVERSAL, SELECT)
         # build a list of possible elements
         elements = single_attributes(self)
         if value is None: value = ''
@@ -341,7 +341,7 @@ class RadioInput(widgets.RadioInput, HTML5Input):
         return mark_safe(u'<label%s>%s %s</label>' % (label_for, self.tag(), choice_label))
 
     def tag(self):
-        new_attrs =  create_attributes(self, UNIVERSAL)
+        new_attrs = create_attributes(self, UNIVERSAL)
         #attrs.update(**new_attrs)
         self.attrs.update(**new_attrs)
         if self.elements:
@@ -386,7 +386,7 @@ class CheckboxSelectMultiple(SelectMultiple):
 class RadioSelect(widgets.RadioSelect, HTML5Input):
 
     def render(self, name, value, attrs=None, choices=()):
-        new_attrs =  create_attributes(self, UNIVERSAL)
+        new_attrs = create_attributes(self, UNIVERSAL)
         # build a list of possible elements
         elements = single_attributes(self)
         attrs.update(**new_attrs)
@@ -429,7 +429,7 @@ class ClearableFileInput(HTML5Input, widgets.ClearableFileInput):
     needs_multipart_form = True
 
     def render(self, name, value, attrs=None):
-        new_attrs =  create_attributes(self, UNIVERSAL)
+        new_attrs = create_attributes(self, UNIVERSAL)
         # build a list of possible elements
         elements = single_attributes(self)
 
@@ -465,7 +465,7 @@ class DateInput(widgets.DateInput, HTML5Input):
     input_type = 'date'
 
     def render(self, name, value, attrs):
-        new_attrs =  create_attributes(self, UNIVERSAL, TIME_NUMERIC)
+        new_attrs = create_attributes(self, UNIVERSAL, TIME_NUMERIC)
         return HTML5Input.render(self, name, value, attrs, new_attrs)
 
 
@@ -473,7 +473,7 @@ class TimeInput(widgets.TimeInput, HTML5Input):
     input_type = 'time'
 
     def render(self, name, value, attrs):
-        new_attrs =  create_attributes(self, UNIVERSAL, TIME_NUMERIC)
+        new_attrs = create_attributes(self, UNIVERSAL, TIME_NUMERIC)
         return HTML5Input.render(self, name, value, attrs, new_attrs)
 
 
@@ -529,8 +529,8 @@ class TelephoneInput(HTML5Input):
 
 class NumberInput(HTML5Input):
     input_type = 'number'
-    min = None
-    max = None
+    min = 1
+    max = 5
     step = None
 
     def __init__(self, attrs=None):
@@ -538,6 +538,11 @@ class NumberInput(HTML5Input):
         if attrs:
             default_attrs.update(attrs)
         super(NumberInput, self).__init__(default_attrs)
+
+    def render(self, name, value, attrs=None):
+        new_attrs = create_attributes(self, UNIVERSAL, PASSWORD, RANGE)
+        if value is None: value = ''
+        return HTML5Input.render(self, name, value, attrs, new_attrs)
 
 
 class RangeInput(NumberInput):
@@ -570,7 +575,7 @@ class DataListInput(HTML5Input, widgets.Select):
 
     def render(self, name, value, attrs=None, choices=()):
         if value is None: value = []
-        new_attrs =  create_attributes(self, UNIVERSAL, TEXT_SEARCH)
+        new_attrs = create_attributes(self, UNIVERSAL, TEXT_SEARCH)
         final_attrs = self.build_attrs(attrs, type=self.input_type, name=name, list=name, **new_attrs)
         output = list()
         output.append(u'<input%s />' % flatatt(final_attrs))
