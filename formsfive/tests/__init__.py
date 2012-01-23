@@ -4,6 +4,7 @@ from django.db import models
 import formsfive as forms
 import datetime, os
 
+
 class FormsFiveTest(TestCase):
     """Testing of all html5 forms and of the different widgets."""
 
@@ -65,7 +66,7 @@ class FormsFiveTest(TestCase):
             pw = forms.CharField(widget=forms.PasswordInput)
 
         form = PwForm(data={'pw': 'some-pwd'})
-        self.assertFalse(form.is_valid()) # missing text
+        self.assertFalse(form.is_valid())  # missing text
         rendered = form.as_p()
         self.assertFalse('some-pwd' in rendered, rendered)
 
@@ -76,7 +77,7 @@ class FormsFiveTest(TestCase):
             )
 
         form = PwForm(data={'pw': 'some-pwd'})
-        self.assertFalse(form.is_valid()) # missing text
+        self.assertFalse(form.is_valid())  # missing text
         rendered = form.as_p()
         self.assertTrue('some-pwd' in rendered, rendered)
 
@@ -338,7 +339,6 @@ class FormsFiveTest(TestCase):
         self.assertTrue('"fr" selected' in rendered, rendered)
         self.assertTrue('"en" selected' in rendered, rendered)
 
-
     def test_select_multiple_values(self):
         """<select multiple>"""
         CHOICES = (
@@ -576,10 +576,10 @@ class FormsFiveTest(TestCase):
     def test_multiple_hidden(self):
         """<input type="hidden"> for fields with a list of values"""
 
-        some_choices = (('foo', 'bar'),('baz', 'meh'),('heh', 'what?!'),)
+        some_choices = (('foo', 'bar'), ('baz', 'meh'), ('heh', 'what?!'),)
 
         class MultiForm(forms.Form):
-            multi = forms.MultipleChoiceField(widget=forms.MultipleHiddenInput,choices=some_choices)
+            multi = forms.MultipleChoiceField(widget=forms.MultipleHiddenInput, choices=some_choices)
 
         rendered = MultiForm(data={'multi': ['heh', 'foo']}).as_p()
         self.assertEquals(len(rendered.split('type="hidden"')), 3, rendered)
@@ -623,7 +623,8 @@ class FormsFiveTest(TestCase):
 
     def test_datalist(self):
         """Data List input with an initial value"""
-        hockey_choices = ((1, 'Winnipeg'),(2, 'Montreal'),(3, 'Vancouver'),)
+        hockey_choices = ((1, 'Winnipeg'), (2, 'Montreal'), (3, 'Vancouver'),)
+
         class HockeyForm(forms.Form):
             hockey = forms.ChoiceField(choices=hockey_choices,
                                      widget=forms.DataListInput)
