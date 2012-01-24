@@ -22,3 +22,7 @@ class TodoForm(forms.HTML5ModelForm):
         self.fields['units'].widget.max = 100
         self.fields['units'].widget.step = 5
 ```
+
+## License
+
+This software is licensed under the New BSD License. For more information, read the file LICENSE.
