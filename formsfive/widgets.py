@@ -117,7 +117,7 @@ class TextInput(widgets.TextInput, HTML5Input):
     input_type = 'text'
 
     def __init__(self, attrs=None):
-        default_attrs = {'pattern': '[\w]+'}
+        default_attrs = {'pattern': '^[\w\s]+'}
         if attrs:
             default_attrs.update(final_attrs)
         super(TextInput, self).__init__(default_attrs)
