@@ -44,7 +44,7 @@ HTML5FIELD_FOR_DBFIELD = {
     models.PositiveIntegerField:        {'form_class': five.IntegerField},
     models.PositiveSmallIntegerField:   {'form_class': five.IntegerField},
     models.TimeField:                   {'form_class': five.TimeField},
-    models.TextField:                   {'form_class': five.SplitDateTimeField, 'widget': Textarea},
+    models.TextField:                   {'form_class': five.CharField, 'widget': Textarea},
     models.URLField:                    {'form_class': five.URLField},
 }
 
